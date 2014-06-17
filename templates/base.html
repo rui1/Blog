@@ -9,6 +9,27 @@
 		<a href="/newpost" class = "navbar">
 			New Post
 		</a>
+        <div id="navbar"> 
+        <ul> 
+        <li><a href="#">Home</a></li> 
+        <li><a href="#">Leetcode</a></li> 
+        <li><a href="#">Family</a></li>
+        <li><a href="#">About</a></li> 
+        <li><a href="#">Contact us</a></li> 
+        </ul> 
+        </div> 
+        
+        <div class="login-area">
+            {% if username %}
+            <span>Welcome {{username}}!</span>
+            |
+            <a class="login-link" href = "/logout">logout</a>
+            {% else %}
+            <a class="login-link" href="/login">login</a>
+            |
+            <a class="login-link" href="/signup">signup</a>
+            {% endif%}
+        </div>
         <a href = "/" class="ruistats-title">
             RuiStats Blog
         </a>

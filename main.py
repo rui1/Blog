@@ -35,9 +35,11 @@ class Handler(webapp2.RequestHandler):
         return cookie_val and check_secure_val(cookie_val)
     def login(self, user):
         self.set_secure_cookies('user_id',str(user.key().id()))
+        self.set_secure_cookies('username',str(user.username))
     def logout(self):
         #self.set_secure_cookies('user_id','')
         self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
+        self.response.headers.add_header('Set-Cookie', 'username=; Path=/')
     def initialize(self, *a, **kw):
         webapp2.RequestHandler.initialize(self,*a,**kw)
         uid = self.read_secure_cookies('user_id')
@@ -51,8 +53,8 @@ class Handler(webapp2.RequestHandler):
                 visits = int(cookie_val)
         visits+=1
         self.set_secure_cookies('visits',str(visits))
-        if visits>=100:
-            return "Congratulations! This is your 100 visits!"
+        if not visits%100:
+            return "Congratulations! You are the "+str(visits)+"th visitors!"
         else:
             return "You've Been here "+ str(visits)+" times!"
      
@@ -66,7 +68,10 @@ class MainPage(Handler):
         posts = Post.all().order('-created') 
         visit_cookie_str= self.request.cookies.get('visits')
         visits = self.visits_count(visit_cookie_str)
-        self.render("blog.html", posts = posts,visits= visits)
+        username = self.read_secure_cookies('username')
+        if not username:
+            self.logout()
+        self.render("blog.html", username=username, posts = posts,visits= visits)
         
  
 
@@ -95,11 +100,12 @@ class NewPost(Handler):
 class Permalink(Handler):
     def get(self,postid = ''):
         key = db.Key.from_path('Post',int(postid))
+        username = self.request.cookies.get('username').split('|')[0]
         selected = db.get(key)
         if not selected:
             self.error(404)
             return
-        self.render("permalink.html",  post = selected)
+        self.render("permalink.html",  post = selected,username=username)
 
         
 class SignUp(Handler):
@@ -114,27 +120,27 @@ class SignUp(Handler):
         self.verify = self.request.get('verify')
         self.email = self.request.get('email')
 
-        params = dict(username = self.username,
+        self.params = dict(username = self.username,
                       email = self.email)
         #key = db.Key.from_path('User',username)
         #selected = db.get(key)
         if not valid_username(self.username):
-            params['error_username'] = "That's not a valid username."
+            self.params['error_username'] = "That's not a valid username."
             have_error = True
 
         if not valid_password(self.password):
-            params['error_password'] = "That wasn't a valid password."
+            self.params['error_password'] = "That wasn't a valid password."
             have_error = True
         elif self.password != self.verify:
-            params['error_verify'] = "Your passwords didn't match."
+            self.params['error_verify'] = "Your passwords didn't match."
             have_error = True
 
         if not valid_email(self.email):
-            params['error_email'] = "That's not a valid email."
+            self.params['error_email'] = "That's not a valid email."
             have_error = True
 
         if have_error:
-            self.render('signup-form.html', **params)
+            self.render('signup-form.html', **self.params)
         else:
             self.done()
         '''
@@ -167,18 +173,21 @@ class register(SignUp):
         existed = a.put()
         if True not in existed:
             self.login(a)
+            self.redirect('/')
+            '''
             h1 = self.read_secure_cookies('user_id')
             if h1:
                 self.redirect('/')
             else:
                 self.render('signup-form.html')
                 self.response.out.write("Don't change the cookies!")
+            '''
         else:
             if existed[0]==True:
-                params['error_email']='This email address has been used!'
+                self.params['error_email']='This email address has been used!'
             if existed[1]==True:
-                params['error_username']='This username has been used!'
-            self.render('signup-form.html',**params)
+                self.params['error_username']='This username has been used!'
+            self.render('signup-form.html',**self.params)
                 
         
     
@@ -190,6 +199,15 @@ class login(Handler):
     def post(self):
         username = self.request.get('username')
         password = self.request.get('password')
+        u = User.login(username, password)
+        if u:
+            self.login(u)
+            self.redirect('/')
+        else:
+            msg = 'Invalid Login'
+            self.render('login-form.html',error = msg)
+          
+        '''   
         params = dict(username = username)
         have_error = False
         new_cookie_val1=str(make_secure_val(username))
@@ -211,13 +229,15 @@ class login(Handler):
             self.render('login-form.html',**params)
         else:
             self.redirect('/welcome')
-        
+        '''
  
 class logout(Handler):
     def get(self):
         #self.response.headers.add_header('Set-Cookie','username=%s' % "")
-        self.response.headers.add_header('Set-Cookie', 'username=%s; Path=/' % '')
-        self.redirect('/signup')
+        #self.response.headers.add_header('Set-Cookie', 'username=%s; Path=/' % '')
+        #self.redirect('/signup')
+        self.logout()
+        self.redirect('/')
     
                 
 class Welcome(Handler):
