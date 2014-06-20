@@ -16,7 +16,8 @@
 #
 from util import *
 from database import *
-from time import sleep
+#from time import sleep
+import time
 import logging
 
 class Handler(webapp2.RequestHandler):
@@ -53,6 +54,7 @@ class Handler(webapp2.RequestHandler):
                 visits = int(cookie_val)
         visits+=1
         self.set_secure_cookies('visits',str(visits))
+        self.set_secure_cookies('timeStamp',str(time.time()))
         if not visits%100:
             return "Congratulations! You are the "+str(visits)+"th visitors!"
         else:

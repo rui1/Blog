@@ -6,14 +6,21 @@
         <title>RuiStat</title>
     </head>
     <body style = "margin : 10">
-		<a href="/newpost" class = "navbar">
-			New Post
-		</a>
+        {% if username =="rui"%}
+            <a href="/newpost" class = "navbar">
+                New Post
+            </a>
+        {% else %}
+            <a href="/" class = "navbar">
+             Welcome!
+            </a>           
+        {% endif %}
         <div id="navbar"> 
         <ul> 
-        <li><a href="#">Home</a></li> 
-        <li><a href="#">Leetcode</a></li> 
-        <li><a href="#">Family</a></li>
+        <li><a href="/">Home</a></li> 
+        <li><a href="#">Algorithm</a></li> 
+        <li><a href="#">Database</a></li>
+        <li><a href="#">Analytics<a></li>
         <li><a href="#">About</a></li> 
         <li><a href="#">Contact us</a></li> 
         </ul> 

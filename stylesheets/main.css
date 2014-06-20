@@ -147,12 +147,12 @@ input[type=submit] {
         } 
  
 #navbar ul li {  
+        padding: .2em 2em;
         display: inline; 
         } 
  
 #navbar ul li a { 
         text-decoration: none; 
-        padding: .2em 1em; 
         color: #fff; 
         background-color: #000; 
         } 
