@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<a>{{visits}}</a>
+
   {% for p in posts %}
     {{ p.render() | safe }}
     <br><br>

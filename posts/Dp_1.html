@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-MML-AM_HTMLorMML-full"> </script>
+<meta charset="utf-8">
+<body>
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+td,th
+{
+padding: 5px; 
+}
+
+.codes {
+    display: none;
+}
+
+</style>
+<script>
+$(document).ready(function() {
+  $('.toggle_codes').click(function() {
+      $("#" + $(this).attr("id") + ".codes").toggle();
+      if($(this).html().search("Hide") > 0) {
+        $(this).html($(this).html().replace("Hide", "Reveal"));
+      } else {
+        $(this).html($(this).html().replace("Reveal", "Hide"));
+      }
+  });
+});
+</script>
+<div id = "container" 
+style="width:800px;
+background-color: 
+#f8f8f8; border: 1px solid rgb(248, 248, 248);">
+<i>Problem description: You are climbing a stair case. It takes n steps to reach to the top.
+Each time you can either climb 1 or 2 steps.<br> In how many distinct ways can you climb to the top?.</i>
+</div>
+
+<p>Since we can only climb 1 or 2 steps each time, there are only two ways we can reach <i>nth</i> stair.
+<ol>
+<li>
+Climb 2 steps from the <i>(n-2)th</i> stair.
+</li >
+<li>
+Climb 1 steps from the <i>(n-1)th</i> stair.
+</li>
+</ol>
+Let `f(n)` be the number of solutions to reach the `nth` stair. This can be tranlated into a recurrence relation:
+</p>
+$$ f(n)=f(n-1)+f(n-2)$$
+<center>$$note: n>2$$</center>
+<p>Let's look at some answers for the first few stairs:</p>
+<table align="center">
+<tr>
+<th> steps </th>
+<th> solution</th>
+<th>recurrence relation</th>
+</tr>
+<tr>
+<td> $$ n= 1$$
+</td>
+<td> $$ 1 $$
+</td>
+<td> $$ - $$
+</td>
+</tr>
+<tr>
+<td> $$ n= 2$$
+</td>
+<td> $$ 2 $$
+</td>
+<td> $$ - $$
+</td>
+</tr>
+<tr>
+<td> $$ n= 3$$
+</td>
+<td> $$ 3 $$
+</td>
+<td> $$ f(1)+f(2)$$
+</td>
+</tr>
+<tr>
+<td> $$ n= 4$$
+</td>
+<td> $$ 5 $$
+</td>
+<td> $$ f(2)+f(3) $$
+</td>
+</tr>
+<tr>
+<td> $$ n= 5$$
+</td>
+<td> $$ 8 $$
+</td>
+<td> $$ f(3)+f(4) $$
+</td>
+</tr>
+<tr>
+<td> $$ n= 6$$
+</td>
+<td> $$ 13 $$
+</td>
+<td> $$ f(4)+f(5) $$
+</td>
+</tr>
+<tr>
+<td> $$ .
+        .
+        .$$
+</td>
+<td> $$ ...$$
+</td>
+<td> $$ ...$$
+</td>
+</tr>
+
+</table>
+<p>Examming the first few terms of the sequence, we can recognize that `f(n)` is the <a href = "http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci sequence</a>.
+<br>
+<br>
+<a href = "https://oj.leetcode.com/problems/climbing-stairs/"> Now Try it yourself on Leetcode!</a> 
+<br>
+<br>
+<b>Hint:</b> Each stair can be treated as one stage. The solution for the later stages can be derived from the previous stages.</p>
+<p>Can your solution calculate `f(200)` in a reasonable amount time? Did you implement the recurrence relation directly?</p>
+
+<div class="toggle_codes" id = "1234"><a href="javascript:;">Reveal Solution</a></div>
+<div class = "codes" id = "1234">
+<div>
+This is typical a <a href = "http://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a> question.</div>
+<script src="https://gist.github.com/rui1/2367894fe3580305d267.js"></script>
+<ul>
+<li>
+Time Complexity: `O(n)`
+</li>
+<li>
+Space Complexity: `O(n)`
+</li>
+</ul>
+</div>
+</body>
+
+

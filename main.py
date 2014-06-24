@@ -18,6 +18,7 @@ from util import *
 from database import *
 #from time import sleep
 import time
+from time import sleep
 import logging
 
 class Handler(webapp2.RequestHandler):
@@ -67,14 +68,24 @@ def render_post(response, post):
 		
 class MainPage(Handler):
     def get(self):
-        posts = Post.all().order('-created') 
+        self.posts = Post.all().order('-created') 
         visit_cookie_str= self.request.cookies.get('visits')
-        visits = self.visits_count(visit_cookie_str)
+        self.visits = self.visits_count(visit_cookie_str)
         username = self.read_secure_cookies('username')
         if not username:
             self.logout()
-        self.render("blog.html", username=username, posts = posts,visits= visits)
-        
+        self.render("blog.html", username=username, posts = self.posts,visits= self.visits)
+
+    def post(self):
+        username = self.request.get('username')
+        password = self.request.get('password')
+        u = User.login(username, password)
+        if u:
+            self.login(u)
+            self.redirect('/')
+        else:
+            msg = 'Invalid Login'
+            self.render('login-form.html',error_login = msg)
  
 
 class NewPost(Handler):
@@ -240,8 +251,32 @@ class logout(Handler):
         #self.redirect('/signup')
         self.logout()
         self.redirect('/')
-    
-                
+class inprogress(Handler):
+    def get(self):
+        self.render('InProcess.html')
+
+class home(Handler):
+    def get(self):
+        self.posts = Post.all().order('-created') 
+        visit_cookie_str= self.request.cookies.get('visits')
+        self.visits = self.visits_count(visit_cookie_str)
+        username = self.read_secure_cookies('username')
+        if not username:
+            self.logout()
+        self.render("home.html", username=username,visits= self.visits)
+
+    def post(self):
+        username = self.request.get('username')
+        password = self.request.get('password')
+        u = User.login(username, password)
+        if u:
+            self.login(u)
+            self.redirect('/')
+        else:
+            msg = 'Invalid Login'
+            self.render('login-form.html',error_login = msg)
+
+        
 class Welcome(Handler):
     def get(self):
         cookies_val = self.request.cookies.get('username')
@@ -254,10 +289,13 @@ class Welcome(Handler):
         else:
             self.redirect('/signup')
             
-app = webapp2.WSGIApplication([('/', MainPage),
+app = webapp2.WSGIApplication([('/', home),
+                               ('/algorithm',MainPage),
                                 ('/newpost',NewPost),
 								(r'/(\d+)',Permalink),
                                 ('/signup',register),
                                ('/welcome',Welcome),
                                ('/login',login),
-                               ('/logout',logout)], debug=True)
+                               ('/logout',logout),
+                               ('/inprogress',inprogress),
+                               ('/home',home)], debug=True)

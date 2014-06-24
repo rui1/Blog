@@ -1,0 +1,62 @@
+#a{
+    text-align: center;
+}
+
+#i1{
+    margin-right: 200px;
+}
+
+#i2{
+    margin-left: 200px;
+}
+.navname{
+float: center; 
+margin: 6px 6px 6px 6px; 
+width: 150px;
+font-weight:bold;
+}
+.pics
+{
+float: left; 
+border: 1px solid #CCC; 
+margin: 6px 0px 6px 6px; 
+width: 300px;
+height: 200px;
+}
+
+.topleft{
+float: left; 
+background-color: #f9faf7; 
+border: 1px solid #CCC; 
+padding: 5px; 
+margin: 0px 25px 15px 5px; 
+width:175px;
+}
+
+.topright {
+float: right; 
+background-color: #f9faf7; 
+border: 1px solid #CCC; 
+padding: 5px; 
+margin: 0px 25px 15px 5px; 
+width:175px;
+}
+
+
+.bottomright {
+float: left; 
+background-color: #f9faf7; 
+border: 1px solid #CCC; 
+padding: 5px; 
+margin: 0px 25px 15px 5px; 
+width:175px;
+}
+
+.bottomleft {
+float: left; 
+background-color: #f9faf7; 
+border: 1px solid #CCC; 
+padding: 5px; 
+margin: 0px 25px 15px 5px; 
+width:175px;
+}

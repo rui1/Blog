@@ -7,7 +7,7 @@ class Post(db.Model):
     last_modified = db.DateTimeProperty(auto_now = True)
 
     def render(self):
-        self._render_text = self.content.replace('\n', '<br>')
+        self._render_text = self.content.replace('\n', '')
         return render_str("post.html", p = self)
 class User(db.Model):
     username = db.StringProperty(required = True)
@@ -42,4 +42,6 @@ class User(db.Model):
             return u
     
 
+    
+    
 	
