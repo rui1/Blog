@@ -14,5 +14,61 @@
   <div class="post-content">
     {{p._render_text | safe}}
   </div>
-</div> 
+  </div> 
+ </form> 
+
+  {% for comment in comments%}
+  <br>
+    <table class = "table1" width = "100%">
+    <tr>
+    <td class = "comment text">
+        <span>{{comment.content}}</span>
+    </td>
+    </tr>
+    <tr>
+    <td><div align = "left">
+    <span><a href = "a">share</a></span><span>&#124;</span><span><a href="#leaveComment">improve it</a></span>
+    </div>
+    </td>
+    <td>
+        <div class = "comment-date" align="right"><span title="{{comments.created}}">{{comment.created}}</span>
+                                                                            </div>
+    </td>   
+    </tr>
+    <tr>
+    <td>
+    </td>
+    <td>
+        <div align = "right">
+        {% if comment.username == "Anonymous"%}
+        <a>{{comment.username}}</a>
+        {% else %}
+        <a href="#"
+                       title="{{comment.username}}"
+                       class="comment-user owner">{{comment.username}}</a>
+        {% endif %}
+        </div>
+    </td>
+    </tr>
+    
+    
+    </table>
+  {% endfor%}
+     {%if comments%}
+   <br>
+<hr>
+<h1>Your Comment ?</h1>
+<form method="post">
+  <label>
+    <div class = "toggle_comment"><a id = "leaveComment" href="javascript:;" class = "leavecomment">Leave your comment<span>&#x25BC;</span></a></div>
+  </label>
+  <div class = "comment-box">
+  <textarea name = "comment-content" class = "comment-box"></textarea>
+  <div class="error">{{comment_error}}</div>
+  <input id="search" value="Submit" type="submit">
+  </div>
 </form>
+
+{% endif %}
+
+

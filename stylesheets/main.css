@@ -203,7 +203,8 @@ nav #signup a {
 nav #login-trigger {
   border-radius: 3px 0 0 3px;
 }
-
+.toggle_comment.active,
+.toggle_comment.hover,
 nav #login-trigger:hover,
 nav #login .active,
 nav #signup a:hover {
@@ -277,10 +278,12 @@ nav li #login-content {
   background-image: linear-gradient(top, #d14545, #e97171);
 } 
 
+
 #login #submit:active {   
   outline: none;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) inset;   
 }
+
 
 #login #submit::-moz-focus-inner {
   border: none;
@@ -306,4 +309,67 @@ nav li #login-content {
   margin: 1px;
   color: white;
 }
+/*--------------------*/
+.comment-user{white-space:nowrap;padding:0}
+.comment-user.owner{padding:2px 5px 2px 5px;
+text-align:left}
+.comment-date{color:#999;
+    text-align: right;
+}
 
+.comment-text,.comment-form
+{
+	padding: 0 6px 0 7px;
+	vertical-align: text-top;
+}
+.comment-text .comment-edited
+{
+	margin-left: 2px;
+	margin-top: 3px;
+	vertical-align: top;
+}
+.comment-box{
+    display :none;
+    width: 100%;
+    height: 80px;
+    padding: 5px;
+}
+.toggle_comment
+{
+display: inline-block;
+}
+
+.leavecomment
+{
+  color: #444;
+  text-shadow: 0 1px 0 #fff; 
+  background: #FFEFD5;
+  text-decoration: none;
+}
+
+input.search {
+    width: 1em;  height: 1em;
+}
+
+.table1{
+border:1px solid #000;
+}
+
+.line {
+  position: absolute;
+  background-color: #000000;
+}
+
+.vertical { 
+   width: 1px;
+   height: 500px;
+}
+
+.horizontal {
+   width: 500px;
+   height: 1px;
+}
+
+#line1 {
+   top: 20px;
+}

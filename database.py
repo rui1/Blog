@@ -1,14 +1,22 @@
 from google.appengine.ext import db
 from util import *
+from time import strftime
 class Post(db.Model):
     title = db.StringProperty(required = True)
     content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
-
-    def render(self):
+    def render(self,comments = ""):
         self._render_text = self.content.replace('\n', '')
-        return render_str("post.html", p = self)
+        return render_str("post.html", p = self,comments = comments)
+        
+class Comment(db.Model):
+    postid = db.IntegerProperty(required = True)
+    content = db.TextProperty(required = True)
+    username = db.StringProperty(required = True)
+    created = db.DateTimeProperty(auto_now_add = True)
+    
+    
 class User(db.Model):
     username = db.StringProperty(required = True)
     pw_hash = db.StringProperty(required = True)

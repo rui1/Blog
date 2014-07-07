@@ -111,16 +111,35 @@ class NewPost(Handler):
             self.render("newpost.html", title = title, content = content, error = error)   
 
 class Permalink(Handler):
-    def get(self,postid = ''):
+    def get(self,postid = '',comment_error = ""):
         key = db.Key.from_path('Post',int(postid))
         username = self.request.cookies.get('username').split('|')[0]
         selected = db.get(key)
+        #q = Comment.all()
+        #q.filter("postid =", int(postid))
+        comments =  db.GqlQuery("select * from Comment where postid="+ postid)
         if not selected:
             self.error(404)
             return
-        self.render("permalink.html",  post = selected,username=username)
-
+        self.render("permalink.html",  post = selected,username=username,comments = comments,comment_error = comment_error)
+    def post(self, postid=''):
+        key = db.Key.from_path('Post',int(postid))
+        username = self.request.cookies.get('username').split('|')[0]
+        selected = db.get(key)
+        username = self.read_secure_cookies('username')
+        content = self.request.get("comment-content")
         
+        if not username:
+            username = "Anonymous"
+        if content:
+            a = Comment(username=username,postid = int(postid), content = content)
+            a.put()
+            sleep(1)
+            self.redirect("/"+postid)
+        else: 
+            error="This is blank comment, please!"
+            self.get(postid = postid,comment_error=error)  
+            
 class SignUp(Handler):
 
     def get(self):
@@ -255,6 +274,38 @@ class inprogress(Handler):
     def get(self):
         self.render('InProcess.html')
 
+class editpost(NewPost):
+    def get(self, postid = ''):
+        key = db.Key.from_path('Post',int(postid))
+        self.username = self.read_secure_cookies('username')
+        self.rui= self.request.cookies.get('username').split('|')[0]
+        self.selected = db.get(key)
+        if not self.selected:
+            self.error(404)
+            return
+        if self.username and self.rui =="rui":
+            self.render('newpost.html',content = self.selected.content, title = self.selected.title, key = postid, username = self.username)
+        else:
+            self.response.out.write("You can't edit the post, but you are very welcome to leave your comments!")
+            self.redirect('/'+str(postid))
+    def post(self,postid):
+        title = self.request.get("title")
+        content = self.request.get("content")
+        key = db.Key.from_path('Post',int(postid))
+        self.selected = db.get(key)
+        if title and content:
+            #self.selected.setProperty("content", content)
+            #self.selected.setProperty("title", title)
+            self.selected.content = content
+            self.selected.title = title
+            self.selected.put()
+            sleep(1)
+            self.redirect("/"+str(self.selected.key().id()))
+        else: 
+            error="title and content, please!"
+            self.render("newpost.html", title = title, content = content, error = error)   
+              
+    
 class home(Handler):
     def get(self):
         self.posts = Post.all().order('-created') 
@@ -298,4 +349,5 @@ app = webapp2.WSGIApplication([('/', home),
                                ('/login',login),
                                ('/logout',logout),
                                ('/inprogress',inprogress),
-                               ('/home',home)], debug=True)
+                               ('/home',home),
+                               ('/(\d+)/editpost',editpost)], debug=True)
