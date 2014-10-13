@@ -153,7 +153,7 @@ class SignUp(Handler):
         self.email = self.request.get('email')
 
         self.params = dict(username = self.username,
-                      email = self.email)
+                      email = self.email,have_error  = False)
         #key = db.Key.from_path('User',username)
         #selected = db.get(key)
         if not valid_username(self.username):
@@ -172,6 +172,7 @@ class SignUp(Handler):
             have_error = True
 
         if have_error:
+            self.params['have_error'] = True
             self.render('signup-form.html', **self.params)
         else:
             self.done()
@@ -217,8 +218,10 @@ class register(SignUp):
         else:
             if existed[0]==True:
                 self.params['error_email']='This email address has been used!'
+                self.params['have_error']=True
             if existed[1]==True:
                 self.params['error_username']='This username has been used!'
+                self.params['have_error']=True
             self.render('signup-form.html',**self.params)
                 
         

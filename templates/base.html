@@ -32,7 +32,7 @@
         </div> 
         
         <div class="login-area">
-            {% if username %}
+            {% if username and not have_error %}
             <span>Welcome {{username}}!</span>
             |
             <a class="login-link" href = "/logout">logout</a>

@@ -1,3 +1,14 @@
+$(document).ready(function() {
+  $('.toggle_codes').click(function() {
+      $("#" + $(this).attr("id") + ".codes").toggle();
+      if($(this).html().search("Reveal") > 0) {
+        $(this).html($(this).html().replace("Reveal", "Hide"));
+      } else {
+        $(this).html($(this).html().replace("Hide", "Reveal"));
+      }
+  });
+});
+
 $(document).ready(function(){
   $('#login-trigger').click(function(){
     $(this).next('#login-content').slideToggle();
@@ -18,13 +29,4 @@ $(document).ready(function() {
     })
 });
 
-$(document).ready(function() {
-  $('.toggle_codes').click(function() {
-      $("#" + $(this).attr("id") + ".codes").toggle();
-      if($(this).html().search("Hide") > 0) {
-        $(this).html($(this).html().replace("Hide", "Reveal"));
-      } else {
-        $(this).html($(this).html().replace("Reveal", "Hide"));
-      }
-  });
-});
+
