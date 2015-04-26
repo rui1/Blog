@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Resume form</h2>
+        <form method="post">
+            <table>
+            <tr>
+              <td class="label">
+                First Name
+              </td>
+              <td>
+                <input type="text" name="firstname" value="{{firstname}}">
+              </td>
+              <td class="error">
+                {{error_firstname}}
+              </td>
+            </tr>
+            <tr>
+              <td class="label">
+                Last Name
+              </td>
+              <td>
+                <input type="text" name="lastname" value="{{lastname}}">
+              </td>
+              <td class="error">
+                {{error_lastname}}
+              </td>
+            </tr>
+            <tr>
+              <td class="label">
+                Last Name
+              </td>
+              <td>
+                <input type="text" name="title" value="{{title}}">
+              </td>
+              <td class="error">
+                {{error_title}}
+              </td>
+            </tr>
+            </table>
+            <input id="search" value="Submit" type="submit">
+            </form>
+    
+{% endblock %}

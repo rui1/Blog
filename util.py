@@ -76,3 +76,8 @@ def rot13(s):
         else:
             ret+=i             
     return ret
+#########################################
+#render helpers
+def render_post(response, post):
+    response.out.write('<b>' + post.subject + '</b><br>')
+    response.out.write(post.content)

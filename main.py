@@ -61,12 +61,10 @@ class Handler(webapp2.RequestHandler):
         else:
             return "You've Been here "+ str(visits)+" times!"
      
-def render_post(response, post):
-    response.out.write('<b>' + post.subject + '</b><br>')
-    response.out.write(post.content)
+
 
 		
-class MainPage(Handler):
+class Algorithm(Handler):
     def get(self):
         self.posts = Post.all().order('-created') 
         visit_cookie_str= self.request.cookies.get('visits')
@@ -86,7 +84,31 @@ class MainPage(Handler):
         else:
             msg = 'Invalid Login'
             self.render('login-form.html',error_login = msg)
- 
+class About(Handler):
+    def get(self):
+        visit_cookie_str= self.request.cookies.get('visits')
+        self.visits = self.visits_count(visit_cookie_str)
+        username = self.read_secure_cookies('username')
+        if not username:
+            self.logout()
+        self.render("About.html", username = username, visits = self.visits)
+
+
+class Rezoom(Handler):
+    def get(self):
+        visit_cookie_str= self.request.cookies.get('visits')
+        self.visits = self.visits_count(visit_cookie_str)
+        username = self.read_secure_cookies('username')
+        if not username:
+            self.logout()
+        self.render("Rezoome_form.html", username = username, visits = self.visits)
+    def post(self):
+        username = self.read_secure_cookies('username')
+        if not username:
+            username = "Anonymous"
+        firstname = self.request.get('firstname')
+        lastname = self.request.get('lastname')
+        self.render("Rezoome_converted.html",username = username,firstname = firstname, lastname = lastname)
 
 class NewPost(Handler):
     def get(self):
@@ -137,7 +159,7 @@ class Permalink(Handler):
             sleep(1)
             self.redirect("/"+postid)
         else: 
-            error="This is blank comment, please!"
+            error="Your cat delet your comment?"
             self.get(postid = postid,comment_error=error)  
             
 class SignUp(Handler):
@@ -341,7 +363,9 @@ class Welcome(Handler):
             self.redirect('/signup')
             
 app = webapp2.WSGIApplication([('/', home),
-                               ('/algorithm',MainPage),
+                               ('/algorithm',Algorithm),
+                               ('/about',About),
+                               ('/rezoome',Rezoom),
                                 ('/newpost',NewPost),
 								(r'/(\d+)',Permalink),
                                 ('/signup',register),
