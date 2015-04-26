@@ -108,7 +108,8 @@ class Rezoom(Handler):
             username = "Anonymous"
         firstname = self.request.get('firstname')
         lastname = self.request.get('lastname')
-        self.render("Rezoome_converted.html",username = username,firstname = firstname, lastname = lastname)
+        title = self.request.get('title')
+        self.render("Rezoome_converted.html",username = username,firstname = firstname, lastname = lastname,title = title)
 
 class NewPost(Handler):
     def get(self):
