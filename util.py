@@ -8,6 +8,9 @@ import hmac
 import string
 import random
 import binascii
+from subprocess import *
+from StringIO import StringIO
+#from weasyprint import HTML,CSS
 
 template_dir = os.path.join(os.path.dirname(__file__),'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -81,3 +84,13 @@ def rot13(s):
 def render_post(response, post):
     response.out.write('<b>' + post.subject + '</b><br>')
     response.out.write(post.content)
+
+
+#########################################
+#converte html to pdf
+'''
+def html_to_pdf(hstr):
+    pdf = StringIO()
+    HTML(string=hstr).write_pdf(pdf,stylesheets=[CSS('stylesheets/resume.css'),CSS(string='@page { size: A3 }')])
+    return pdf.getvalue()
+'''

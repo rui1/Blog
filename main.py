@@ -16,7 +16,7 @@
 #
 from util import *
 from database import *
-#from time import sleep
+from time import sleep
 import time
 from time import sleep
 import logging
@@ -101,7 +101,7 @@ class Rezoom(Handler):
         username = self.read_secure_cookies('username')
         if not username:
             self.logout()
-        self.render("Rezoome_form.html", username = username, visits = self.visits)
+        self.render("Rezoome_form.html", username = username, visits = self.visits,firstname ='')
     def post(self):
         username = self.read_secure_cookies('username')
         if not username:
@@ -109,8 +109,32 @@ class Rezoom(Handler):
         firstname = self.request.get('firstname')
         lastname = self.request.get('lastname')
         title = self.request.get('title')
-        self.render("Rezoome_converted.html",username = username,firstname = firstname, lastname = lastname,title = title)
+        if len(firstname)>0:
+            self.redirect("/rezoome/download")
+        else:
+            self.render("Rezoome_form.html",username = username)
+class downloadsHandler(Handler):
+    def get(self):
+        firstname = self.request.get('firstname')
+        lastname = self.request.get('lastname')
+        title = self.request.get('title')
+        template = jinja_env.get_template('/templates/Rezoome_converted.html')
+        self.response.write(template.render(template,firstname = firstname, lastname = lastname, title = title))
+        # data to download
+        buf = html_to_pdf(self.response)
 
+        # size of data
+        size  = sys.getsizeof(buf)
+
+        # set HTTP headers to notify server of download
+        self.response.headers["Content-Type"] = "text/csv"
+        self.response.headers["Cache-Control"] = "no-cache, must-revalidate"
+        self.response.headers["Content-Disposition"] = "attachment; filename=kioskData.csv"
+        self.response.headers["Content-Length"] = size
+        self.response.headers["Content-Transfer-Encoding"] = "binary"
+
+        # generate download
+        self.response.write(buf)
 class NewPost(Handler):
     def get(self):
         if self.user:
@@ -367,6 +391,7 @@ app = webapp2.WSGIApplication([('/', home),
                                ('/algorithm',Algorithm),
                                ('/about',About),
                                ('/rezoome',Rezoom),
+                               ('/rezoome/download',downloadsHandler),
                                 ('/newpost',NewPost),
 								(r'/(\d+)',Permalink),
                                 ('/signup',register),

@@ -1,27 +1,36 @@
+__author__ = 'rui'
+import pdfkit
+from StringIO import StringIO
+from weasyprint import HTML,CSS
+def html_to_pdf(hstr):
+    pdf = StringIO()
+    #pdfkit.from_string(hstr,'test.pdf')
+    HTML(string=hstr).write_pdf(pdf,stylesheets=[CSS('resume.css'),CSS(string='@page { size: A3 }')])
+    return pdf.getvalue()
+body = "Rui_Yang_Resume.html"
+body = """
 <!DOCTYPE html>
 <html>
 <head>
-
-	
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
 
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" media="all" /> 
-	<link rel="stylesheet" type="text/css" href="/stylesheets/resume.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="test_ref/resume.css" media="all" />
 
 </head>
 <body>
 
 <div id="doc2" class="yui-t7">
 	<div id="inner">
-	
+
 		<div id="hd">
 			<div class="yui-gc">
 				<div class="yui-u first">
-					<h1>{{firstname}} {{lastname}}</h1>
-					<h2>{{title}}</h2>
+					<h1>Rui Yang</h1>
+					<h2>Data Engineer</h2>
 				</div>
 
 				<div class="yui-u">
@@ -46,7 +55,7 @@
 						</div>
 						<div class="yui-u">
 							<p class="enlarge">
-								Python data engineer with experience building solid data pipelines and implementing statistical models. 
+								Python data engineer with experience building solid data pipelines and implementing statistical models.
 							</p>
 						</div>
 					</div><!--// .yui-gf -->
@@ -80,7 +89,7 @@
 					</div><!--// .yui-gf-->
 
 					<div class="yui-gf">
-	
+
 						<div class="yui-u first">
 							<h2>Experience</h2>
 						</div><!--// .yui-u -->
@@ -116,7 +125,7 @@
 									<ol> <li1> Established an ETL process in T-SQL and R to match misspelled records from multiple sources; achieved 30% more accuracy than previous processes and shortened the processing time by 80%</li1></ol>
 									<ol> <li1> Consolidated data in SQL and Python, built logistic model in R and JMP to predict store performance, which provided guidance for store managers to monitor and improve their business</li1></ol>
 
-									<ol> <li1> Designed an A/B test for pay rate; diagnosed factors that hurt business in certain areas of the US and 
+									<ol> <li1> Designed an A/B test for pay rate; diagnosed factors that hurt business in certain areas of the US and
 
 									communicated insights with managers to improve policy and store management</li1></ol>
 
@@ -124,7 +133,7 @@
 
 									enabling quick decision-making; managers preferred these dashboards over previous static reports</li1></ol>
 
-									<ol> <li1> Converted multi-day, manual reporting and validating process to a single-click, automated process, resulting 
+									<ol> <li1> Converted multi-day, manual reporting and validating process to a single-click, automated process, resulting
 
 									in substantial savings of analyst time</li1></ol>
 
@@ -143,7 +152,7 @@
 
 								<section class='smallfont'>Master of Applied Statistics &mdash; GPA: 3.8</section>
 								<aside >Fall 2011 - Winter2012  </aside>
-							<section> Groep T of Katholieke Univesity Leuven</section> 
+							<section> Groep T of Katholieke Univesity Leuven</section>
 							<aside> - Leuven, Belgium</aside>
 								<section class='smallfont'>M.S.E. in Electromechanical Engineering</section>
 								<aside >Fall 2010 - Summer 2011  </aside>
@@ -172,4 +181,6 @@
 
 </body>
 </html>
-
+"""
+test = html_to_pdf(body)
+print test

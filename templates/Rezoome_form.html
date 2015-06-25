@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+<div>
+    <div style="float:left">
     <h2>Resume form</h2>
         <form method="post">
             <table>
@@ -27,7 +29,7 @@
             </tr>
             <tr>
               <td class="label">
-                Last Name
+                Title
               </td>
               <td>
                 <input type="text" name="title" value="{{title}}">
@@ -37,7 +39,9 @@
               </td>
             </tr>
             </table>
-            <input id="search" value="Submit" type="submit">
+            <input id="search" value="Ready for a Cat walk" type="submit">
             </form>
-    
+        </div>
+</div>
+<iframe name="dynamicframe" id="dynamicframe" src="javascript:'-'"></iframe>
 {% endblock %}
